@@ -1,0 +1,179 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Course {
+  id                Int                 @id @default(autoincrement())
+  title             String
+  description       String
+  duration          String
+  schedule          String
+  location          String
+  maxStudents       Int
+  price             Float
+  image             String
+  metadata          Json?
+  CourseBatch       CourseBatch[]
+  CourseCurriculum  CourseCurriculum[]
+  CourseFeature     CourseFeature[]
+  CourseOutcome     CourseOutcome[]
+  CourseRequirement CourseRequirement[]
+  Instructor        Instructor[]
+}
+
+model CourseBatch {
+  id           Int      @id @default(autoincrement())
+  name         String
+  startingFrom DateTime
+  courseId     Int
+  Course       Course   @relation(fields: [courseId], references: [id])
+}
+
+model CourseCurriculum {
+  id                    Int                     @id @default(autoincrement())
+  index                 Int
+  title                 String
+  week                  String
+  courseId              Int
+  Course                Course                  @relation(fields: [courseId], references: [id])
+  CourseCurriculumTopic CourseCurriculumTopic[]
+}
+
+model CourseCurriculumTopic {
+  id                 Int              @id @default(autoincrement())
+  name               String
+  courseCurriculumId Int
+  CourseCurriculum   CourseCurriculum @relation(fields: [courseCurriculumId], references: [id])
+}
+
+model CourseFeature {
+  id       Int    @id @default(autoincrement())
+  name     String
+  courseId Int
+  Course   Course @relation(fields: [courseId], references: [id])
+}
+
+model CourseOutcome {
+  id       Int    @id @default(autoincrement())
+  name     String
+  courseId Int
+  Course   Course @relation(fields: [courseId], references: [id])
+}
+
+model CourseRequirement {
+  id       Int    @id @default(autoincrement())
+  name     String
+  courseId Int
+  Course   Course @relation(fields: [courseId], references: [id])
+}
+
+model Instructor {
+  id                       Int                        @id @default(autoincrement())
+  name                     String
+  role                     String
+  image                    String
+  experience               String
+  email                    String                     @unique
+  industries               String[]
+  skills                   String[]
+  expertises               String[]
+  strengths                String[]
+  specialties              String[]
+  about                    String
+  pastEmployers            String[]
+  InstructorAchievement    InstructorAchievement[]
+  InstructorCertifications InstructorCertifications[]
+  InstructorEductation     InstructorEductation[]
+  Course                   Course[]
+}
+
+model InstructorAchievement {
+  id           Int        @id @default(autoincrement())
+  title        String
+  description  String
+  year         Int
+  instructorId Int
+  Instructor   Instructor @relation(fields: [instructorId], references: [id])
+}
+
+model InstructorCertifications {
+  id           Int        @id @default(autoincrement())
+  name         String
+  issuer       String
+  year         Int
+  instructorId Int
+  Instructor   Instructor @relation(fields: [instructorId], references: [id])
+}
+
+model InstructorEductation {
+  id           Int        @id @default(autoincrement())
+  degree       String
+  institution  String
+  year         Int
+  instructorId Int
+  Instructor   Instructor @relation(fields: [instructorId], references: [id])
+}
+
+model User {
+  id          Int     @id @default(autoincrement())
+  clerkUserId String  @unique
+  firstName   String?
+  lastName    String?
+  email       String  @unique
+  role        Role    @default(USER)
+  metadata    Json?
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model EmailOpen {
+  id             String   @id @default(cuid())
+  emailId        String
+  openedAt       DateTime @default(now())
+
+  // Network
+  ip             String?
+  isp            String?
+  org            String?
+  asn            String?
+
+  // Location (from IP geolocation)
+  country        String?
+  countryCode    String?
+  region         String?
+  regionName     String?
+  city           String?
+  zip            String?
+  lat            Float?
+  lon            Float?
+  timezone       String?
+
+  // HTTP headers
+  userAgent      String?
+  referer        String?
+  acceptLanguage String?
+
+  // Parsed UA — browser
+  browserName    String?
+  browserVersion String?
+
+  // Parsed UA — OS
+  osName         String?
+  osVersion      String?
+
+  // Parsed UA — device
+  deviceType     String?
+  deviceVendor   String?
+  deviceModel    String?
+
+  @@index([emailId])
+  @@index([openedAt])
+}
