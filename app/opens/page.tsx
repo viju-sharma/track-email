@@ -11,7 +11,7 @@ export default async function OpensPage() {
   const total = await prisma.emailOpen.count()
 
   return (
-    <main className="p-8 font-mono text-sm">
+    <main className="p-8 font-mono text-sm text-gray-900 bg-white min-h-screen">
       <h1 className="text-2xl font-bold mb-1">Email Opens</h1>
       <p className="text-gray-500 mb-6">{total} open event(s) total</p>
 
@@ -46,7 +46,7 @@ export default async function OpensPage() {
                 <tr key={o.id} className="odd:bg-white even:bg-gray-50">
                   <td className="p-2 border font-bold">{o.emailId}</td>
                   <td className="p-2 border whitespace-nowrap">
-                    {new Date(o.openedAt).toLocaleString()}
+                    {new Date(o.openedAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
                   </td>
                   <td className="p-2 border">{[o.city, o.regionName].filter(Boolean).join(', ') || '—'}</td>
                   <td className="p-2 border">{o.country ? `${o.country} (${o.countryCode})` : '—'}</td>
