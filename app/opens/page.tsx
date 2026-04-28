@@ -18,7 +18,7 @@ export default async function OpensPage() {
       <div className="mb-8 p-4 bg-gray-100 rounded text-xs">
         <p className="font-bold mb-1">Embed in your email HTML:</p>
         <code className="break-all">
-          {'<img src="https://yourdomain.com/api/pixel?id=YOUR_EMAIL_ID" width="1" height="1" alt="" />'}
+          {'<img src="https://track-email-swart.vercel.app/api/pixel?id=YOUR_EMAIL_ID" width="1" height="1" alt="" />'}
         </code>
       </div>
 
